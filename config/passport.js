@@ -32,7 +32,8 @@ passport.serializeUser(async function (user, done) {
 //Si no existe un user con ese id, se inserta en la base de datos
 
         if(!existUser){
-            (await pool).query('insert into users("id", "fullname", "email","imagen") values($1, $2, $3, $4)', [idReducido, user.displayName, user.emails[0].value, user.photos[0].value], 
+            (await pool).query('insert into users("id", "fullname", "email","imagen") values($1, $2, $3, $4)', 
+            [idReducido, user.displayName, user.emails[0].value, user.photos[0].value], 
             (qerr2, qres2) => {
                 if(qerr2){
                     console.log(qerr2);
@@ -41,7 +42,6 @@ passport.serializeUser(async function (user, done) {
             });
         }
     });
-
     done(null, idReducido);
 });
 
@@ -51,17 +51,15 @@ passport.deserializeUser(async function (id, done) {
     }
     console.log(id);
     (await pool).query('select u.id, u.fullname, u.email, u.imagen from users u where u.id = $1', [id], async(qerr, qres) => {
-        if(!qerr){
+        if(qerr){
+            console.error(qerr);
+        }else{
             const user=qres.rows[0];
             if(user){
-                done(null,user);
-            }
-            else{
+                done(null, user);
+            }else{
                 done();
             }
-        }else{
-            console.error(qerr);
-        } 
-        
+        }   
     });
 });
