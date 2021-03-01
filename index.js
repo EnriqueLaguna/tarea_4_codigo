@@ -34,7 +34,11 @@ app.use(passport.session());
 app.use('/auth', authRouter);
 
 app.get('/',(req,res)=>{
-  res.render('home',{template:req.user?'logout':'login'})
+  if(req.user){
+    res.render('home', {template: 'logout'});
+  }else{
+    res.render('home', {template: 'login'});
+  }
 });
 
 app.get('/profile',(req,res)=>{
