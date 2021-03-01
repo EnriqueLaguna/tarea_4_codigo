@@ -1,4 +1,3 @@
-const createError = require('http-errors');
 const passport=require('passport');
 const path = require('path');
 const express = require('express');
@@ -20,7 +19,6 @@ app.engine('hbs', hbs({extname: 'hbs', defaultLayout: 'layout', layoutsDir: __di
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
-app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -36,16 +34,15 @@ app.use(passport.session());
 app.use('/auth', authRouter);
 
 app.get('/',(req,res)=>{
-    res.render('home',{template:req.user?'logout':'login'})
+  res.render('home',{template:req.user?'logout':'login'})
 });
 
 app.get('/profile',(req,res)=>{
-    console.log(req.user);
+  console.log(req.user);
   const profile = req.user;
   const imagen = profile.imagen;
   const name = profile.fullname;
   const email = profile.email;
-  //console.log("profairu",profile);
   res.render('profile',{name:name,imagen:imagen,email:email});
 });
 
