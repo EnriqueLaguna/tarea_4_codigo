@@ -51,7 +51,8 @@ app.get('/profile',(req,res)=>{
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+  res.status(404).send('The route was not found 404, index');
+  next();
 });
 
 // // error handler
